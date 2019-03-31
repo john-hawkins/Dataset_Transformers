@@ -12,9 +12,9 @@ approaches.
 
 # Examples
 
-In the data directory there is (Run Script)[data/run.sh] to grab the example data set.
+In the data directory there is [Run Script](data/run.sh) to grab the example data set.
 
-After you have executed it you can execute the (python example)[examples/example_one_lagged_features.py]
+After you have executed it you can execute the [python example](examples/example_one_lagged_features.py)
 
 This will apply the lagging and differences
 
