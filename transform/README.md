@@ -43,3 +43,11 @@ These indicators form the basis of what is often graphically displayed as a Ichi
 * Senkou Span B (Leading Span B): (52-period high + 52-period low)/2))
 
 
+50 Day Moving Average
+
+200 Day Moving Average
+
+Golden Cross -- When 50 day rises over the 200 day 
+
+Death Cross -- When the 200 day rises over the 50 day
+

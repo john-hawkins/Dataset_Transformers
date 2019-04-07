@@ -2,15 +2,31 @@ import numpy as np
 import pandas as pd
 
 # ####################################################################################
-# TAKE A DATASET OF INDIVIDUAL TIME RECODS AND RESHAPE AS A SET OF PREDICTORS
-# AND A SINGLE TARGET COLUMN
+# Generate Time Dependent Features
+#
+# TAKE A DATASET OF INDIVIDUAL TIME SERIES RECORDS AND RESHAPE IT.
+# CREATE A TARGET VARIABLE DEPENDING ON THE FORECAST DISTANCE AND A SET OF FEATURES 
+# FOR APPLYING A STANDARD ML MODEL.
 # ASSUMPTIONS
 #  --- REGULAR TIME PERIOD DATA
 #  --- THERE WILL BE ROWS FOR MISSING VALUES
-#  --- DATAFRAME IS ORDERED IN TIME
+#  --- DATAFRAME IS ALREADY ORDERED IN TIME
 #  --- THERE IS AN INTEGER INDEX COLUMN THAT INDICATES THE SEQUENCE IN TIME
+#
+# IF THE LAST THREE OF THESE ARE NOT TRUE THEN USE THEN YOU WILL NEED TO USE THE 
+# ADDITIONAL LIBRARY FUNCTION: apply_order_fill_index from DatasetPreparer.py
+#
 # ###################################################################################
-def generate_time_series_dataset( df, index_column, forecast_column, forecast_period, list_of_lags):
+
+def generate_time_dependent_features( df, index_column, forecast_column, forecast_period, list_of_lags, list_of_mas=[] ):
+    # ADD THE MOVING AVERAGES BEFORE LAGGING
+    if(list_of_mas):
+        df_temp = df.copy()
+        for ma in list_of_mas:
+            field_name = "MA_" + str(ma) + "_" + forecast_column
+            df_temp[field_name] = df[forecast_column].rolling(window=ma).mean()
+        df = df_temp
+
     df_f = df[0:len(df)-forecast_period]
     df_t = df[forecast_period:].copy()
     df_t[index_column] = df_t[index_column]-forecast_period

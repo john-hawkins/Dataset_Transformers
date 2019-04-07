@@ -20,16 +20,13 @@ df.columns = ['Week', 'Day', 'NonUrgent', 'Urgent', 'TypeA', 'TypeB', 'TypeC',
 # DATA - FOR EXAMPLE IN THIS DATA THERE ARE MISSING WEEKENDS AND PUBLIC HOLIDAYS
 df['No'] = range(0, len(df) )
 
-# THIS IS NOT NECESSARY
-# df.sort_values(by=['Week', 'Day'])
-
-
 index_column = "No"
 forecast_column = "Total"
 forecast_period = 1
-list_of_lags = [1,2,3,4]
+list_of_lags = []
+list_of_mas = [3,7]
 
-new_df = dg.generate_time_dependent_features( df, index_column, forecast_column, forecast_period, list_of_lags)
+new_df = dg.generate_time_dependent_features( df, index_column, forecast_column, forecast_period, list_of_lags, list_of_mas)
 
 # ###########################################################################################################
 # SPLIT IT INTO TRAIN AND TEST
@@ -56,6 +53,7 @@ test_df2 = test_df.loc[:,features]
 config = nzr.create_normalization_config(train_df2)
 train_df_norm = nzr.normalize(train_df2, config, ['Week', 'Day'])
 test_df_norm = nzr.normalize(test_df2, config, ['Week', 'Day'])
+
 
 train_df_norm.to_csv('Train_set_normalised.csv', sep=',', encoding='utf-8', index=False, header=True)
 test_df_norm.to_csv('Test_set_normalised.csv', sep=',', encoding='utf-8', index=False, header=True)
