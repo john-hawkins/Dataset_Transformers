@@ -15,7 +15,9 @@ DatasetGenerator.py
 
 # Normaliser
 
-This is a function to normalise the values of a set of columns in a dataset. 
+This is a set of functions used to normalise the values of a set of columns in a dataset.
+You first need to generate the normalisation parameters using training data, and then
+apply that normalisation to both training, testing and scoring data. 
 
  Normalizer.py 
 
@@ -24,9 +26,11 @@ This is a function to normalise the values of a set of columns in a dataset.
 
 # Technical Analysis Transformer
 
+## NOT IMPLEMENTED
+
 This is a transformer that continues that approach above, transforming time
-series into targets and lagged features. But the Technical Analysis version
-creates a range of higher order fetaures that are typically used in the
+series data into targets, windowed and lagged features. But the Technical Analysis version
+creates a range of higher order features that are typically used in the
 technical analysis of market data.
 
 

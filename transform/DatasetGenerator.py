@@ -18,7 +18,9 @@ import pandas as pd
 #
 # ###################################################################################
 
-def generate_time_dependent_features( df, index_column, forecast_column, forecast_period, list_of_lags, list_of_mas=[] ):
+def generate_time_dependent_features( df, index_column, forecast_column, forecast_period, 
+                                      list_of_lags, list_of_mas=[] ):
+
     # ADD THE MOVING AVERAGES BEFORE LAGGING
     if(list_of_mas):
         df_temp = df.copy()
@@ -31,12 +33,14 @@ def generate_time_dependent_features( df, index_column, forecast_column, forecas
     df_t = df[forecast_period:].copy()
     df_t[index_column] = df_t[index_column]-forecast_period
 
-    # FIRST WE JOIN THE DATA AGAINST ITSELF ONCE OVER THE FORECAST PERIOD TO CREATE A DIFF VALUE
-    # -- FORECASTING FIRST ORDER DIFFERENCE IS A BETTER TARGET FOR MANY TIME SERIES PROBLEMS
+    # FIRST JOIN IS DONE OVER THE FORECAST WINDOW
+    # -- WE JOIN THE DATA AGAINST ITSELF ONCE OVER THE FORECAST PERIOD TO CREATE A TARGET VALUE
     TARGET_COL_NAME = "TARGET" + "_" + forecast_column + "_" + str(forecast_period) + "_VALUE"
     df_t = df_t.rename(columns={forecast_column: TARGET_COL_NAME})
     df_targs = df_t.loc[:,[index_column, TARGET_COL_NAME]]
 
+    # IN ADDITION ADD A DIFFERNCE BETWEEN CURRENT AN TARGET (AS AN ALTERNATIVE TARGET)
+    # -- FORECASTING FIRST ORDER DIFFERENCE IS A BETTER TARGET FOR MANY TIME SERIES PROBLEMS
     TARGET_DIFF_COL_NAME = "TARGET" + "_" + forecast_column + "_" + str(forecast_period) + "_DIFF"
     final_df = pd.merge(df_f, df_targs, left_on=index_column, right_on=index_column)
     final_df[ TARGET_DIFF_COL_NAME ] = final_df[ TARGET_COL_NAME ] - final_df[forecast_column]

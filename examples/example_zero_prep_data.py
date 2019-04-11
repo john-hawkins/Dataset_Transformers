@@ -4,8 +4,7 @@ import pandas as pd
 import sys
 sys.path.append('../')
 
-from transform import DatasetGenerator as dg
-from transform import Normalizer as nzr
+from transform import DatasetPreparer as dp
 
 df = pd.read_csv('../data/Daily_Demand_Forecasting_Orders.csv', sep=';')
 
@@ -13,6 +12,25 @@ df = pd.read_csv('../data/Daily_Demand_Forecasting_Orders.csv', sep=';')
 # RENAME FOR CONVENIENCE
 df.columns = ['Week', 'Day', 'NonUrgent', 'Urgent', 'TypeA', 'TypeB', 'TypeC',
        'Fiscal', 'Traffic', 'Banking1', 'Banking2', 'Banking3', 'Total']
+
+df['No'] = range( 0, len(df) )
+df['Month'] = np.where(df['No']>38, 3, 2)
+df['Month'] = np.where(df['No']<19, 1, df['Month'])
+
+df['dayofmonth'] = 7*(df['Week']-1)+(df['Day']-2)
+
+df['dayofmonth'] = np.where( df['No']>38,df['dayofmonth']-2, df['dayofmonth'] )
+ 
+df['daystring'] = pd.to_string(df['dayofmonth'])
+
+df['daystring'] = np.where( df['dayofmonth']<10, "0"+str(df['dayofmonth']), str(df['dayofmonth'] ) )
+
+df['datetime_string'] = "1999-" + str(df['Month']) + "-" + df['daystring']
+
+df['datetime'] = pd.to_datetime(df1['Actual Settlement Date'], format='%Y-%m-%d')
+
+new_df = dp.apply_order_fill_index( df, datetime_column, index_col_name, expected_interval )
+
 
 # ###########################################################################################################
 # CREATE AN INDEX COLUMN TO MANIPULATE
