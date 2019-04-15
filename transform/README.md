@@ -47,11 +47,54 @@ These indicators form the basis of what is often graphically displayed as a Ichi
 * Senkou Span B (Leading Span B): (52-period high + 52-period low)/2))
 
 
-50 Day Moving Average
+## Crosses
 
-200 Day Moving Average
+Calculate the following features
 
-Golden Cross -- When 50 day rises over the 200 day 
+* 50 Day Moving Average
+* 200 Day Moving Average
+* 100 Day Exponetial Moving Average
+* Golden Cross -- Did the 50 day MA rise over the 200 day MA 
+* Death Cross -- Did the 200 day MA rise over the 50 day MA
+* Silver Cross -- Did the 50 day MA rise over the 100 day EMA
 
-Death Cross -- When the 200 day rises over the 50 day
+
+
+## Bollinger Bands
+
+Calculate a 20 Day Moving Average
+
+Calculate the standard deviation using the same data
+
+Generate the following features
+
+* MBB. Middle Bollinger Band = 20 Day MA
+* UBB. Upper Bollinger band = MBB + 2 x standard deviation
+* LBB. Lower Bollinger band = MBB - 2 x standard deviation
+* %b. Percent b = (current − LBB) / (UBB − LBB)
+* Bandwidth = (UBB − LBB) / MBB 
+
+https://www.bollingerbands.com/bollinger-bands
+
+
+## Relative Strength Index (RSI)
+
+To calculate this indicator we need to look at the point to point changes
+over each of the discrete points within the period of analysis.
+
+The period is typically 14 days.
+
+Within this period you calculate the average percentage change for all the
+upward movements, and the average absolute percentage change for all the downward
+movements. This is will give you Average Upward Change AUC and 
+Average Downward Change ADC. 
+
+These two values are then avaraged again once we have derived the AUC and ADC 
+for 14 periods. This gives you Average AUC and Average ADC.
+
+The calculation consists of 2 indicators.
+
+* RSI_1 = 100 – [100 / ( 1 + (Average Upward Change / Average Downward Change ) ) ]
+
+* RSI_2 = 100 – [100 / ( 1 + ( Average AUC / Average ADC ) ) ]
 
