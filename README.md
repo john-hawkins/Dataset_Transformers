@@ -25,3 +25,14 @@ This will apply only the lagging and first order differences differences
 
 This will apply only the lagging and first order differences differences
 
+
+
+# Core Functions
+
+The Normalizer object exposes methods for creating normalization/standardization configurations for a dataset
+including min/max or mean/std methods. The Min/Max methods also supprt the application of padding values to 
+push the normlized vales away from the extremes (thus allowing any models to potentially learn values beyond
+the observed limits).
+
+
+

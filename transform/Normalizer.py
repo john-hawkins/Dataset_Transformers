@@ -13,6 +13,19 @@ def create_normalization_config(df):
     max_vector = df.max()
     return {'stds':std_vector, 'means':mean_vector, 'mins':min_vector, 'maxs':max_vector}
 
+
+def create_padded_normalization_config(df, padding):
+    std_vector = df.std()
+    mean_vector = df.mean()
+    min_vector = df.min()
+    max_vector = df.max()
+    spread_vector = max_vector - min_vector
+    pad_vector = spread_vector * padding
+    min_vector = min_vector - pad_vector
+    max_vector = max_vector + pad_vector
+    return {'stds':std_vector, 'means':mean_vector, 'mins':min_vector, 'maxs':max_vector}
+
+
 def standardize(df, config, excluded):
    rez = (df - config['means'])/config['stds']
    rez = rez.fillna(0)
@@ -25,6 +38,19 @@ def normalize(df, config, excluded):
    rez = rez.fillna(0.5)
    for index in excluded:
       rez[index] = df[index]
+   return rez
+
+
+def normalize_padded(df, config, excluded, padded):
+   rez = (df - config['mins']) / (config['maxs']-config['mins'])
+   spread = (config['maxs']-config['mins'])
+   pad = (df - config['mins'] + (spread*0.05) ) / (spread * 1.1)
+   rez = rez.fillna(0.5)
+   pad = pad.fillna(0.5)
+   for index in excluded:
+      rez[index] = df[index]
+   for index in padded:
+      rez[index] = pad[index]
    return rez
 
 def de_normalize(df, config, excluded):
@@ -42,6 +68,8 @@ def de_normalize_all(df, config):
    rez = df.copy()
    rez = ( df * (config['max']-config['min']) ) + config['min']
    return rez
+
+
 
 # ###################################################################################################
 #  READ AND WRITE THE CONFIG FILE 
