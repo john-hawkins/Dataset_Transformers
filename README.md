@@ -19,6 +19,7 @@ After you have executed it you can execute one of these examples
 
 This will apply only the lagging and first order differences differences
 
+
 ## Example Two - Moving Average Features Only
 
 [python code](examples/example_two_moving_average_features.py)
@@ -31,8 +32,9 @@ This will apply only the lagging and first order differences differences
 
 The Normalizer object exposes methods for creating normalization/standardization configurations for a dataset
 including min/max or mean/std methods. The Min/Max methods also supprt the application of padding values to 
-push the normlized vales away from the extremes (thus allowing any models to potentially learn values beyond
-the observed limits).
+push the normlized vales away from the extremes. The rationale being that a model trained on targets normalised
+in this fashion could potentially extrapolate to make predictions beyond the observed min and max.
+
 
 
 

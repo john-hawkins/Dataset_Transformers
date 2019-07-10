@@ -25,7 +25,7 @@ def generate_time_dependent_features( df, index_column, forecast_column, forecas
     if(list_of_mas):
         df_temp = df.copy()
         for ma in list_of_mas:
-            field_name = "MA_" + str(ma) + "_" + forecast_column
+            field_name = "MAvg_" + str(ma) + "_" + forecast_column
             df_temp[field_name] = df[forecast_column].rolling(window=ma).mean()
         df = df_temp
 
@@ -39,17 +39,16 @@ def generate_time_dependent_features( df, index_column, forecast_column, forecas
     df_t = df_t.rename(columns={forecast_column: TARGET_COL_NAME})
     df_targs = df_t.loc[:,[index_column, TARGET_COL_NAME]]
 
-    # IN ADDITION ADD A DIFFERNCE BETWEEN CURRENT AN TARGET (AS AN ALTERNATIVE TARGET)
-    # -- FORECASTING FIRST ORDER DIFFERENCE IS A BETTER TARGET FOR MANY TIME SERIES PROBLEMS
-    TARGET_DIFF_COL_NAME = "TARGET" + "_" + forecast_column + "_" + str(forecast_period) + "_DIFF"
+    # IN ADDITION ADD A PROPORTIONAL DIFFERNCE BETWEEN CURRENT AND TARGET (AS AN ALTERNATIVE TARGET)
+    TARGET_DIFF_COL_NAME = "TARGET" + "_" + forecast_column + "_" + str(forecast_period) + "_PROP_DIFF"
     final_df = pd.merge(df_f, df_targs, left_on=index_column, right_on=index_column)
-    final_df[ TARGET_DIFF_COL_NAME ] = final_df[ TARGET_COL_NAME ] - final_df[forecast_column]
+    final_df[ TARGET_DIFF_COL_NAME ] = (final_df[ TARGET_COL_NAME ] - final_df[forecast_column]) / final_df[forecast_column]
 
     # JOIN AGAIN TO GET THE PREVIOUS DIFF AS A FEATURE
     df_pd =  final_df[0:len(final_df)-forecast_period].copy()
     df_pd[index_column] = df_pd[index_column]+forecast_period
     df_main = final_df[forecast_period:].copy()
-    diff_col_name = "CURRENT_" + forecast_column + "_" + str(forecast_period) + "_DIFF"
+    diff_col_name = "CURRENT_" + forecast_column + "_" + str(forecast_period) + "_PROP_DIFF"
     df_pd = df_pd.rename(columns={TARGET_DIFF_COL_NAME: diff_col_name})
     df_pd_only = df_pd.loc[:,[index_column, diff_col_name]]
     final_df2 = pd.merge(df_pd_only, df_main, left_on=index_column, right_on=index_column)
@@ -69,7 +68,7 @@ def generate_time_dependent_features( df, index_column, forecast_column, forecas
         df_feat[index_column] = df_feat[index_column] + lag_diff
         df_targ = df_main[lag_diff:].copy()
         new_col_name = "LAG_" + str(lag) + "_" + forecast_column 
-        new_col_name_diff = "LAG_" + str(lag) + "_" + forecast_column + "_" + str(forecast_period) + "_DIFF"
+        new_col_name_diff = "LAG_" + str(lag) + "_" + forecast_column + "_" + str(forecast_period) + "_PROP_DIFF"
         df_feat = df_feat.rename(columns={target_diff_col_to_lag: new_col_name_diff, target_col_to_lag: new_col_name})
         df_feat_only = df_feat.loc[:,[index_column, new_col_name, new_col_name_diff]]
         df_main = pd.merge(df_feat_only, df_targ, left_on=index_column, right_on=index_column)

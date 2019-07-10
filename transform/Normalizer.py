@@ -86,10 +86,10 @@ def read_normalization_config( filepath ):
     return data_loaded
 
 def write_field_config( cfg, target_column_name, filepath ) :
-    data = {'mean':cfg['means'][target_column_name], 
-            'min':cfg['mins'][target_column_name],
-            'max':cfg['maxs'][target_column_name],
-            'std':cfg['stds'][target_column_name] }    
+    data = {'mean':float(cfg['means'][target_column_name]), 
+            'min':float(cfg['mins'][target_column_name]),
+            'max':float(cfg['maxs'][target_column_name]),
+            'std':float(cfg['stds'][target_column_name]) }    
     with io.open(filepath, 'w', encoding='utf8') as outfile:
         yaml.dump(data, outfile) #, default_flow_style=False, allow_unicode=True)
 
