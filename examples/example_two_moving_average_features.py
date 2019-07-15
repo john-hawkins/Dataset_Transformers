@@ -38,8 +38,8 @@ test_df = new_df.loc[trainset+1:,:]
 # ###########################################################################################################
 # WRITE OUT THE FULL UN-NORMALISED VERSION
 # ###########################################################################################################
-train_df.to_csv('Train_set_full.csv', sep=',', encoding='utf-8', index=False, header=True)
-test_df.to_csv('Test_set_full.csv', sep=',', encoding='utf-8', index=False, header=True)
+train_df.to_csv('results/Train_set_full.csv', sep=',', encoding='utf-8', index=False, header=True)
+test_df.to_csv('results/Test_set_full.csv', sep=',', encoding='utf-8', index=False, header=True)
 
 # ###########################################################################################################
 #  REMOVE UNWANTED COLUMNS, NORMALISE AND WRITE TO DISK
@@ -54,7 +54,6 @@ config = nzr.create_normalization_config(train_df2)
 train_df_norm = nzr.normalize(train_df2, config, ['Week', 'Day'])
 test_df_norm = nzr.normalize(test_df2, config, ['Week', 'Day'])
 
-
-train_df_norm.to_csv('Train_set_normalised.csv', sep=',', encoding='utf-8', index=False, header=True)
-test_df_norm.to_csv('Test_set_normalised.csv', sep=',', encoding='utf-8', index=False, header=True)
+train_df_norm.to_csv('results/Train_set_normalised.csv', sep=',', encoding='utf-8', index=False, header=True)
+test_df_norm.to_csv('results/Test_set_normalised.csv', sep=',', encoding='utf-8', index=False, header=True)
 
