@@ -25,8 +25,12 @@ def generate_time_dependent_features( df, index_column, forecast_column, forecas
     if(list_of_mas):
         df_temp = df.copy()
         for ma in list_of_mas:
+            field_name = "MIN_" + str(ma) + "_" + forecast_column
+            df_temp[field_name] = df[forecast_column].rolling(window=ma).min()
             field_name = "MAvg_" + str(ma) + "_" + forecast_column
             df_temp[field_name] = df[forecast_column].rolling(window=ma).mean()
+            field_name = "MAX_" + str(ma) + "_" + forecast_column
+            df_temp[field_name] = df[forecast_column].rolling(window=ma).max()
         df = df_temp
 
     df_f = df[0:len(df)-forecast_period]
