@@ -34,8 +34,10 @@ def standardize(df, config, excluded):
    return rez
 
 def normalize(df, config, excluded):
+   features = df.columns
    rez = (df - config['mins']) / (config['maxs']-config['mins'])
    rez = rez.fillna(0.5)
+   rez = rez.loc[:,features]
    for index in excluded:
       rez[index] = df[index]
    return rez
